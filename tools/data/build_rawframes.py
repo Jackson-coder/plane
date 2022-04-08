@@ -154,7 +154,7 @@ def parse_args():
     parser.add_argument(
         '--num-worker',
         type=int,
-        default=8,
+        default=6,
         help='number of workers to build rawframes')
     parser.add_argument(
         '--flow-type',
@@ -187,7 +187,7 @@ def parse_args():
         type=int,
         default=0,
         help='resize image short side length keeping ratio')
-    parser.add_argument('--num-gpu', type=int, default=8, help='number of GPU')
+    parser.add_argument('--num-gpu', type=int, default=1, help='number of GPU')
     parser.add_argument(
         '--resume',
         action='store_true',

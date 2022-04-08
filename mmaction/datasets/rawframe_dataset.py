@@ -96,7 +96,7 @@ class RawframeDataset(BaseDataset):
                  with_offset=False,
                  multi_class=False,
                  num_classes=None,
-                 start_index=1,
+                 start_index=0,
                  modality='RGB',
                  sample_by_class=False,
                  power=0.,
@@ -166,6 +166,7 @@ class RawframeDataset(BaseDataset):
             results['filename_tmpl'] = self.filename_tmpl
             results['modality'] = self.modality
             results['start_index'] = self.start_index
+            # print('>>>>>>>>>>>>',results['start_index'])
 
             # prepare tensor in getitem
             if self.multi_class:

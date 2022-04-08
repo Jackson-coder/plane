@@ -14,7 +14,7 @@ from tools.data.parse_file_list import (parse_directory, parse_diving48_splits,
                                         parse_kinetics_splits,
                                         parse_mit_splits, parse_mmit_splits,
                                         parse_sthv1_splits, parse_sthv2_splits,
-                                        parse_ucf101_splits)
+                                        parse_ucf101_splits, parse_planewheel_split)
 
 
 def parse_args():
@@ -25,7 +25,7 @@ def parse_args():
         choices=[
             'ucf101', 'kinetics400', 'kinetics600', 'kinetics700', 'thumos14',
             'sthv1', 'sthv2', 'mit', 'mmit', 'activitynet', 'hmdb51', 'jester',
-            'diving48'
+            'diving48','plane-wheel'
         ],
         help='dataset to be built file list')
     parser.add_argument(
@@ -45,7 +45,7 @@ def parse_args():
     parser.add_argument(
         '--num-split',
         type=int,
-        default=3,
+        default=1,
         help='number of split to file list')
     parser.add_argument(
         '--subset',
@@ -211,10 +211,12 @@ def main():
         splits = parse_jester_splits(args.level)
     elif args.dataset == 'diving48':
         splits = parse_diving48_splits()
+    elif args.dataset == 'plane-wheel':
+        splits = parse_planewheel_split(args.level)
     else:
         raise ValueError(
             f"Supported datasets are 'ucf101, sthv1, sthv2', 'jester', "
-            f"'mmit', 'mit', 'kinetics400', 'kinetics600', 'kinetics700', but "
+            f"'mmit', 'mit', 'kinetics400', 'kinetics600', 'kinetics700', 'plane-wheel', but "
             f'got {args.dataset}')
 
     assert len(splits) == args.num_split
@@ -254,10 +256,13 @@ def main():
             raise ValueError(f"subset must be in ['train', 'val', 'test'], "
                              f'but got {args.subset}.')
 
-        filename = f'{args.dataset}_{args.subset}_list_{args.format}.txt'
+        filename_rgb = f'{args.dataset}_{args.subset}_list_rgb_{args.format}.txt'
+        filename_flow = f'{args.dataset}_{args.subset}_list_flow_{args.format}.txt'
         if args.output_format == 'txt':
-            with open(osp.join(out_path, filename), 'w') as f:
+            with open(osp.join(out_path, filename_rgb), 'w') as f:
                 f.writelines(lists[0][ind])
+            with open(osp.join(out_path, filename_flow), 'w') as f:
+                f.writelines(lists[1][ind])
         elif args.output_format == 'json':
             data_list = lines2dictlist(lists[0][ind], args.format)
             filename = filename.replace('.txt', '.json')

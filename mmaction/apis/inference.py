@@ -182,6 +182,7 @@ def inference_recognizer(model, video, outputs=None, as_tensor=True, **kwargs):
         returned_features = h.layer_outputs if outputs else None
 
     num_classes = scores.shape[-1]
+    # print(num_classes)
     score_tuples = tuple(zip(range(num_classes), scores))
     score_sorted = sorted(score_tuples, key=itemgetter(1), reverse=True)
 
